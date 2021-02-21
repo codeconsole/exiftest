@@ -15,7 +15,7 @@ To run this example:
   cordova run ios/browser/android
 ```
 
-After running the ios version, a script is provided to install an example image with exif info onto the simulator.  You can run the following but MAKE SURE YOU RUN IT WHILE THE SIMULATOR IS RUNNING: 
+After running the ios version, a script is provided to install an example image with exif info onto the simulator.  You can run the following but MAKE SURE YOU RUN IT WHILE THE IOS SIMULATOR IS RUNNING: 
 ```
 ./copyExamplePhotoToRunningSim.sh
 ```
