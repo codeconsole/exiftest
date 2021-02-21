@@ -29,7 +29,7 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.jsdelivr.net data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
@@ -42,10 +42,18 @@
             <h1>Apache Cordova</h1>
             <div id="deviceready" class="blink">
                 <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
+                <p class="event received">Device is Ready!</p>
+            </div>
+            <div>
+                <button id="CAMERA">Camera</button>
+                <button id="PHOTOLIBRARY">Photo Library</button>
+            </div>
+            <div>
+                <img id="selectedImage" src="#" style="visibility: hidden;" width="200" />
             </div>
         </div>
         <script src="cordova.js"></script>
         <script src="js/index.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
     </body>
 </html>
