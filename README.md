@@ -15,7 +15,12 @@ To run this example:
   cordova run ios/browser/android
 ```
 
-A script is provided to test varios versions of the plugin which currently defaults to v5.0.1
+After running the ios version, a script is provided to install an example image with exif info onto the simulator.  You can run the following but MAKE SURE YOU RUN IT WHILE THE SIMULATOR IS RUNNING: 
+```
+./copyExamplePhotoToRunningSim.sh
+```
+
+A script is provided to test various versions of the plugin which currently defaults to v5.0.1
 
 https://github.com/apache/cordova-plugin-camera
 
