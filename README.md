@@ -27,3 +27,7 @@ if you want to try @ryaa 's version, you can execute the following:
 
 You can always switch back to the release version:
 `./switch.sh release`
+
+Unfortunately, this has been broken for a very long time.  I believe it is due to a new image being created in the temporary folder. It would be nice if the plugin supported a way to just upload the original or make an exact copy of the original rather than changing compression.
+
+https://github.com/apache/cordova-plugin-camera/issues/524
