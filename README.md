@@ -17,7 +17,7 @@ To run this example:
 
 After running the ios version, a script is provided to install an example image with exif info onto the simulator.  You can run the following but MAKE SURE YOU RUN IT WHILE THE IOS SIMULATOR IS RUNNING: 
 ```
-./copyExamplePhotoToRunningSim.sh
+./bin/copyExamplePhotoToRunningSim.sh
 ```
 
 A script is provided to test various versions of the plugin which currently defaults to v5.0.1
@@ -25,13 +25,13 @@ A script is provided to test various versions of the plugin which currently defa
 https://github.com/apache/cordova-plugin-camera
 
 For example, if you want to switch to using the master version in github, you can execute the following:
-`./switch.sh master`
+`./bin/switch.sh master`
 
 if you want to try @ryaa 's version, you can execute the following:
-`./switch.sh ryaa`
+`./bin/switch.sh ryaa`
 
 You can always switch back to the release version:
-`./switch.sh release`
+`./bin/switch.sh release`
 
 Unfortunately, this has been broken for a very long time.  I believe it is due to a new image being created in the temporary folder. It would be nice if the plugin supported a way to just upload the original or make an exact copy of the original rather than changing compression.
 
