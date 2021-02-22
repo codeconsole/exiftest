@@ -69,7 +69,9 @@ function processPhoto(source) {
             }
             processFile(new Blob([new Uint8Array(byteNumbers)], {type: 'image/jpg'}));
         } else {
-            if (cordova.platformId == 'Android' && imageURI.indexOf('file://') == -1) {
+            if (cordova.platformId === 'android' 
+                && imageURI.indexOf('file://') == -1
+                && imageURI.indexOf('content://') == -1) {
                 imageURI = 'file://' + imageURI;
             }
             document.getElementById('selectedImage').src = cordova.platformId == 'iOS'? window.WkWebView.convertFilePath(imageURI) : imageURI
@@ -83,11 +85,11 @@ function processPhoto(source) {
                         }
                         reader.readAsArrayBuffer(file)
                     }, function (err) { 
-                        console.error('error converting fileentry to file!' + err);
+                        alert('Error converting fileentry to file!' + JSON.stringify(err));
                     })
                 }, function (err) {
                     console.log('imageURI: '+ imageURI);
-                    console.error('error getting fileentry file!' + JSON.stringify(err));
+                    alert('Error getting fileentry file!' + JSON.stringify(err));
             })
         }
     }, function(message) {
