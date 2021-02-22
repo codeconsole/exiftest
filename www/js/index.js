@@ -38,11 +38,11 @@ function onDeviceReady() {
 
 function processPhoto(source) {
     var opts = {
-        quality: 100,
+        // quality: 50,
         //destinationType: Camera.DestinationType.DATA_URL,
         destinationType: Camera.DestinationType.FILE_URI,
         // saveToPhotoAlbum: source === Camera.PictureSourceType.CAMERA,
-        correctOrientation: false,
+        // correctOrientation: false,
         sourceType: source
     }
 
