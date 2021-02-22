@@ -1,5 +1,5 @@
 if [ $# -lt 1 ]; then
-  echo "switch.sh release/master/ryaa"
+  echo "./bin/switch.sh [release/master/ryaa/pullrequest]"
   exit
 fi
 cordova plugin remove cordova-plugin-camera
@@ -16,4 +16,5 @@ else
   VERSION=cordova-plugin-camera
 fi
 echo "\n*** Installing \"$VERSION\"...\n"
+echo cordova plugin add $VERSION
 cordova plugin add $VERSION
