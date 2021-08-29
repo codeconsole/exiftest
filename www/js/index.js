@@ -45,22 +45,30 @@ function processPhoto(source) {
     }
 
     navigator.camera.getPicture(function(imageURI) {
+        var img = { filename: imageURI }
+        if (imageURI.indexOf('filename') != -1) {
+            img = JSON.parse(imageURI)
+            img.json_metadata = JSON.parse(img.json_metadata)
+        }
         //$('#upload-computer div.img-wrap img').attr('src', submitDestinationType == Camera.DestinationType.DATA_URL? 'data:image/jpeg;base64,'+imageData : imageData)
         // https://github.com/apache/cordova-ios/issues/883
         // https://github.com/apache/cordova-plugin-camera/issues/622
         // https://github.com/apache/cordova-ios/issues/947
         function processFile(blob) {
             EXIF.getData(blob, function() {
-                var allMetaData = EXIF.getAllTags(this);
-                alert(JSON.stringify(allMetaData, null, "\t"));
+                if (opts.destinationType == Camera.DestinationType.DATA_URL) {
+                    img.filename = 'DATA_URL'   
+                }
+                img.exif = EXIF.getAllTags(this);
+                alert(JSON.stringify(img, null, "\t"));
             });            
         }
         document.getElementById('selectedImage').style = '';
         if (cordova.platformId == 'browser' || opts.destinationType == Camera.DestinationType.DATA_URL) {
-            document.getElementById('selectedImage').src = 'data:image/jpeg;base64,'+imageURI
+            document.getElementById('selectedImage').src = 'data:image/jpeg;base64,'+img.filename
             
             // https://stackoverflow.com/questions/15341912/how-to-go-from-blob-to-arraybuffer
-            var byteCharacters = atob(imageURI);
+            var byteCharacters = atob(img.filename);
             var byteNumbers = new Array(byteCharacters.length);
             for (var i = 0; i < byteCharacters.length; i++) {
                 byteNumbers[i] = byteCharacters.charCodeAt(i);
@@ -68,12 +76,12 @@ function processPhoto(source) {
             processFile(new Blob([new Uint8Array(byteNumbers)], {type: 'image/jpg'}));
         } else {
             if (cordova.platformId === 'android' 
-                && imageURI.indexOf('file://') == -1
-                && imageURI.indexOf('content://') == -1) {
-                imageURI = 'file://' + imageURI;
+                && img.filename.indexOf('file://') == -1
+                && img.filename.indexOf('content://') == -1) {
+                img.filename = 'file://' + img.filename;
             }
-            document.getElementById('selectedImage').src = cordova.platformId == 'iOS'? window.WkWebView.convertFilePath(imageURI) : imageURI
-            window.resolveLocalFileSystemURL(imageURI,
+            document.getElementById('selectedImage').src = cordova.platformId == 'iOS'? window.WkWebView.convertFilePath(img.filename) : img.filename
+            window.resolveLocalFileSystemURL(img.filename,
                 function success(fileEntry) {
                     fileEntry.file(function (file) {
                         var reader = new FileReader();
@@ -86,7 +94,7 @@ function processPhoto(source) {
                         alert('Error converting fileentry to file!' + JSON.stringify(err));
                     })
                 }, function (err) {
-                    console.log('imageURI: '+ imageURI);
+                    console.log('filename: '+ img.filename);
                     alert('Error getting fileentry file!' + JSON.stringify(err));
             })
         }
