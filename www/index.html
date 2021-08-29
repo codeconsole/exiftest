@@ -45,6 +45,17 @@
                 <p class="event received">Device is Ready!</p>
             </div>
             <div>
+                <input name="quality" type="text" value="50" style="width: 20px;" />
+                <select name="destinationType">
+                    <option value="FILE_URI">FILE_URI</option>
+                    <option value="DATA_URL">DATA_URL</option>
+                </select>
+                correctOrientation:<select name="correctOrientation">
+                    <option value="true">true</option>
+                    <option value="true">false</option>
+                </select>
+            </div>
+            <div>
                 <button id="CAMERA">Camera</button>
                 <button id="PHOTOLIBRARY">Photo Library</button>
             </div>
@@ -55,5 +66,6 @@
         <script src="cordova.js"></script>
         <script src="js/index.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
+        <script src="js/jquery.min.js"></script>
     </body>
 </html>

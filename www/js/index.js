@@ -38,11 +38,9 @@ function onDeviceReady() {
 
 function processPhoto(source) {
     var opts = {
-        // quality: 50,
-        //destinationType: Camera.DestinationType.DATA_URL,
-        destinationType: Camera.DestinationType.FILE_URI,
-        // saveToPhotoAlbum: source === Camera.PictureSourceType.CAMERA,
-        // correctOrientation: false,
+        quality: parseInt($('input[name=quality]').val()),
+        destinationType: Camera.DestinationType[$('select[name=destinationType]').val()],
+        correctOrientation: $('input[name=correctOrientation]').val() == 'true',
         sourceType: source
     }
 
@@ -58,13 +56,13 @@ function processPhoto(source) {
             });            
         }
         document.getElementById('selectedImage').style = '';
-        if (cordova.platformId == 'browser') { // result is always Camera.DestinationType.DATA_URL
-            document.getElementById('selectedImage').src = 'data:image/jpeg;base64,'+imageURI;
+        if (cordova.platformId == 'browser' || opts.destinationType == Camera.DestinationType.DATA_URL) {
+            document.getElementById('selectedImage').src = 'data:image/jpeg;base64,'+imageURI
             
             // https://stackoverflow.com/questions/15341912/how-to-go-from-blob-to-arraybuffer
-            const byteCharacters = atob(imageURI);
-            const byteNumbers = new Array(byteCharacters.length);
-            for (let i = 0; i < byteCharacters.length; i++) {
+            var byteCharacters = atob(imageURI);
+            var byteNumbers = new Array(byteCharacters.length);
+            for (var i = 0; i < byteCharacters.length; i++) {
                 byteNumbers[i] = byteCharacters.charCodeAt(i);
             }
             processFile(new Blob([new Uint8Array(byteNumbers)], {type: 'image/jpg'}));
