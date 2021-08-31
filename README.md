@@ -12,6 +12,8 @@ To run this example:
   git clone https://github.com/codeconsole/exiftest
   cd exiftest
   cordova prepare
+  cordova platform remove android
+  cordova platform add android@10.1.0
   cordova run ios/browser/android
 ```
 
@@ -26,6 +28,10 @@ https://github.com/apache/cordova-plugin-camera
 
 For example, if you want to switch to using the master version in github, you can execute the following:
 `./bin/switch.sh master`
+
+https://github.com/apache/cordova-plugin-camera/pull/712
+if you want to try the most up to date pull request, you can execute the following:
+`./bin/switch.sh pullrequest`
 
 if you want to try @ryaa 's version, you can execute the following:
 `./bin/switch.sh ryaa`
