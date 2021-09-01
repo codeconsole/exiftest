@@ -8,7 +8,6 @@ What this example demonstrates is a specific photo can not be selected from the 
 To set up this example:
 ```
 ./bin/capacitorInit.sh
-
 ```
 or manually:
 ```
@@ -17,6 +16,11 @@ npx cap add ios
 npx cap add android
 cp conf/Info.plist ios/App/App/Info.plist
 cp conf/AndroidManifest.xml android/app/src/main/AndroidManifest.xml
+```
+
+Followed by:
+```
+npx cap run ios
 ```
 
 https://github.com/ionic-team/capacitor-plugins/issues/587
