@@ -1,4 +1,4 @@
-const { Camera, Filesystem } = Capacitor.Plugins;
+const { Camera, Filesystem } = Capacitor.Plugins
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -21,19 +21,19 @@ const { Camera, Filesystem } = Capacitor.Plugins;
 
 // Wait for the deviceready event before using any of Cordova's device APIs.
 // See https://cordova.apache.org/docs/en/latest/cordova/events/events.html#deviceready
-document.addEventListener('deviceready', onDeviceReady, false);
+document.addEventListener('deviceready', onDeviceReady, false)
 
 function onDeviceReady() {
     // Cordova is now initialized. Have fun!
 
-    console.log('Running cordova-' + Capacitor.platform);
+    console.log('Running cordova-' + Capacitor.platform)
     if (Camera) {
-        document.getElementById('deviceready').classList.add('ready');
+        document.getElementById('deviceready').classList.add('ready')
         document.getElementById('CAMERA').onclick = function() {
-            processPhoto('PHOTOS');
+            processPhoto('CAMERA')
         }
         document.getElementById('PHOTOLIBRARY').onclick = function() {
-            processPhoto('PHOTOS');
+            processPhoto('PHOTOS')
         }
     }
 
@@ -42,25 +42,36 @@ function onDeviceReady() {
 
 function processPhoto(source) {
     // https://github.com/ionic-team/capacitor/blob/2.4.9/core/src/core-plugin-definitions.ts
-    Camera.getPhoto({
-      quality: parseInt($('input[name=quality]').val()),
-      resultType: $('select[name=destinationType]').val() == 'FILE_URI'? 'uri' : 'dataUrl',
-      allowEditing: false,
-      correctOrientation: $('input[name=correctOrientation]').val() == 'true',
-      source: source
-    }).then(function(photo) {
-        $('#selectedImage').attr('src', photo.dataUrl? photo.dataUrl : photo.webPath).css('visibility', 'visible')
-
-        if (photo.dataUrl) {
-            var blob = CameraUtil.stringToBlob(photo.dataUrl.substring('data:image/jpeg;base64,'.length))
-            photo.dataUrl = '[HIDDEN]'
-            CameraUtil.showResult(blob, photo)
-        } else{
-            Filesystem.readFile({path: photo.path}).then(function(file) {
-                CameraUtil.showResult(CameraUtil.stringToBlob(file.data), photo)
+    Camera.checkPermissions().then(function(permissions) {
+        if (permissions[source.toLowerCase()] != 'granted') {
+            Camera.requestPermissions(source.toLowerCase()).then(function(permissionStatus) {
+                if (permissions[source.toLowerCase()] != 'denied') {
+                    processPhoto(source)
+                } else {
+                    alert('You have not granted access to use the '+source.toLowerCase())
+                }
             })
         }
-    }, function(error) {
-        console.error(error)
+        Camera.getPhoto({
+          quality: parseInt($('input[name=quality]').val()),
+          resultType: $('select[name=destinationType]').val() == 'FILE_URI'? 'uri' : 'dataUrl',
+          allowEditing: false,
+          correctOrientation: $('input[name=correctOrientation]').val() == 'true',
+          source: source
+        }).then(function(photo) {
+            $('#selectedImage').attr('src', photo.dataUrl? photo.dataUrl : photo.webPath).css('visibility', 'visible')
+
+            if (photo.dataUrl) {
+                var blob = CameraUtil.stringToBlob(photo.dataUrl.substring('data:image/jpeg;base64,'.length))
+                photo.dataUrl = '[HIDDEN]'
+                CameraUtil.showResult(blob, photo)
+            } else{
+                Filesystem.readFile({path: photo.path}).then(function(file) {
+                    CameraUtil.showResult(CameraUtil.stringToBlob(file.data), photo)
+                })
+            }
+        }, function(error) {
+            console.error(error)
+        })
     })
 }
