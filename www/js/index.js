@@ -1,3 +1,5 @@
+const { Camera, Filesystem } = Capacitor.Plugins;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -24,66 +26,38 @@ document.addEventListener('deviceready', onDeviceReady, false);
 function onDeviceReady() {
     // Cordova is now initialized. Have fun!
 
-    console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
-    if (navigator.camera) {
-	    document.getElementById('deviceready').classList.add('ready');
-	    document.getElementById('CAMERA').onclick = function() {
-	    	processPhoto(Camera.PictureSourceType.CAMERA);
-	    }
-	    document.getElementById('PHOTOLIBRARY').onclick = function() {
-	    	processPhoto(Camera.PictureSourceType.PHOTOLIBRARY);
-	    }
-    }
+    //console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
+    //if (navigator.camera) {
+        document.getElementById('deviceready').classList.add('ready');
+        document.getElementById('CAMERA').onclick = function() {
+            processPhoto('PHOTOS');
+        }
+        document.getElementById('PHOTOLIBRARY').onclick = function() {
+            processPhoto('PHOTOS');
+        }
+    //}
+
 }
 
 function processPhoto(source) {
-    var opts = {
-        quality: parseInt($('input[name=quality]').val()),
-        destinationType: Camera.DestinationType[$('select[name=destinationType]').val()],
-        correctOrientation: $('input[name=correctOrientation]').val() == 'true',
-        sourceType: source
-    }
+    // https://github.com/ionic-team/capacitor/blob/2.4.9/core/src/core-plugin-definitions.ts
+    Camera.getPhoto({
+      quality: parseInt($('input[name=quality]').val()),
+      resultType: $('select[name=destinationType]').val() == 'FILE_URI'? 'uri' : 'dataUrl',
+      allowEditing: false,
+      correctOrientation: $('input[name=correctOrientation]').val() == 'true',
+      source: source
+    }).then(function(photo) {
+        $('#selectedImage').attr('src', photo.dataUrl? photo.dataUrl : photo.webPath).css('visibility', 'visible')
 
-    navigator.camera.getPicture(function(imageURI) {
-        var img = { filename: imageURI }
-        if (imageURI.indexOf('filename') != -1) {
-            img = JSON.parse(imageURI)
-            img.json_metadata = JSON.parse(img.json_metadata)
-        }
-        var selectedImage = $('#selectedImage')
-        selectedImage.css('visibility', 'visible')
-        if (cordova.platformId == 'browser' || opts.destinationType == Camera.DestinationType.DATA_URL) {
-            selectedImage.attr('src', 'data:image/jpeg;base64,'+img.filename)
-            var blob = CameraUtil.stringToBlob(img.filename)
-            img.filename = '[HIDDEN]'
-            CameraUtil.showResult(blob, img)
-        } else {
-            if (cordova.platformId === 'android' 
-                && img.filename.indexOf('file://') == -1
-                && img.filename.indexOf('content://') == -1) {
-                img.filename = 'file://' + img.filename;
-            }
-            selectedImage.attr('src', cordova.platformId == 'iOS'? window.WkWebView.convertFilePath(img.filename) : img.filename)
-            window.resolveLocalFileSystemURL(img.filename,
-                function success(fileEntry) {
-                    fileEntry.file(function (file) {
-                        var reader = new FileReader();
-                        reader.onloadend = function() {
-                            // https://stackoverflow.com/questions/27159179/how-to-convert-blob-to-file-in-javascript
-                            CameraUtil.showResult(new Blob([new Uint8Array(this.result)], {type: file.contentType}), img)
-                        }
-                        reader.readAsArrayBuffer(file)
-                    }, function (err) { 
-                        alert('Error converting fileentry to file!' + JSON.stringify(err));
-                    })
-                }, function (err) {
-                    console.log('filename: '+ img.filename);
-                    alert('Error getting fileentry file!' + JSON.stringify(err));
+        if (photo.dataUrl) {
+            var blob = CameraUtil.stringToBlob(photo.dataUrl.substring('data:image/jpeg;base64,'.length))
+            photo.dataUrl = '[HIDDEN]'
+            CameraUtil.showResult(blob, photo)
+        } else{
+            Filesystem.readFile({path: photo.path}).then(function(file) {
+                CameraUtil.showResult(CameraUtil.stringToBlob(file.data), photo)
             })
         }
-    }, function(message) {
-        if (message != 'No Image Selected') {
-            alert(JSON.stringify(message));
-        }
-    }, opts);
+    })
 }

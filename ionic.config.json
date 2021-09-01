@@ -1,0 +1,7 @@
+{
+  "name": "HelloCordova",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "custom"
+}

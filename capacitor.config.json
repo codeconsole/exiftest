@@ -1,0 +1,11 @@
+{
+  "appId": "io.cordova.hellocordova",
+  "appName": "HelloCordova",
+  "webDir": "www",
+  "bundledWebRuntime": true,
+  "cordova": {
+    "preferences": {
+      "CameraUsesGeolocation": "true"
+    }
+  }
+}
