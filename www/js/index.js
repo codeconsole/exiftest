@@ -18,8 +18,10 @@ function onDeviceReady() {
 
 function processPhoto(source) {
     // https://github.com/ionic-team/capacitor/blob/2.4.9/core/src/core-plugin-definitions.ts
+    // https://github.com/ionic-team/capacitor/blob/main/core/src/definitions.ts
+    // https://github.com/ionic-team/capacitor-plugins/blob/main/camera/src/definitions.ts
     Camera.checkPermissions().then(function(permissions) {
-        if (permissions[source.toLowerCase()] != 'granted' && confirm('Run Camera.requestPermissions()?')) {
+        if (permissions[source.toLowerCase()] != 'granted' && confirm('Run Camera.requestPermissions(\''+source.toLowerCase()+'\')?')) {
             Camera.requestPermissions(source.toLowerCase()).then(function(permissionStatus) {
                 if (permissions[source.toLowerCase()] != 'denied') {
                     processPhoto(source)
@@ -28,6 +30,8 @@ function processPhoto(source) {
                 }
                 return
             })
+        } else {
+            return
         }
         Camera.getPhoto({
           quality: parseInt($('input[name=quality]').val()),
