@@ -50,30 +50,12 @@ function processPhoto(source) {
             img = JSON.parse(imageURI)
             img.json_metadata = JSON.parse(img.json_metadata)
         }
-        //$('#upload-computer div.img-wrap img').attr('src', submitDestinationType == Camera.DestinationType.DATA_URL? 'data:image/jpeg;base64,'+imageData : imageData)
-        // https://github.com/apache/cordova-ios/issues/883
-        // https://github.com/apache/cordova-plugin-camera/issues/622
-        // https://github.com/apache/cordova-ios/issues/947
-        function processFile(blob) {
-            EXIF.getData(blob, function() {
-                if (opts.destinationType == Camera.DestinationType.DATA_URL) {
-                    img.filename = 'DATA_URL'   
-                }
-                img.exif = EXIF.getAllTags(this);
-                alert(JSON.stringify(img, null, "\t"));
-            });            
-        }
         document.getElementById('selectedImage').style = '';
         if (cordova.platformId == 'browser' || opts.destinationType == Camera.DestinationType.DATA_URL) {
             document.getElementById('selectedImage').src = 'data:image/jpeg;base64,'+img.filename
-            
-            // https://stackoverflow.com/questions/15341912/how-to-go-from-blob-to-arraybuffer
-            var byteCharacters = atob(img.filename);
-            var byteNumbers = new Array(byteCharacters.length);
-            for (var i = 0; i < byteCharacters.length; i++) {
-                byteNumbers[i] = byteCharacters.charCodeAt(i);
-            }
-            processFile(new Blob([new Uint8Array(byteNumbers)], {type: 'image/jpg'}));
+            var blob = CameraUtil.stringToBlob(img.filename)
+            img.filename = '[HIDDEN]'
+            CameraUtil.showResult(blob, img)
         } else {
             if (cordova.platformId === 'android' 
                 && img.filename.indexOf('file://') == -1
@@ -87,7 +69,7 @@ function processPhoto(source) {
                         var reader = new FileReader();
                         reader.onloadend = function() {
                             // https://stackoverflow.com/questions/27159179/how-to-convert-blob-to-file-in-javascript
-                            processFile(new Blob([new Uint8Array(this.result)], {type: file.contentType}));
+                            CameraUtil.showResult(new Blob([new Uint8Array(this.result)], {type: file.contentType}), img)
                         }
                         reader.readAsArrayBuffer(file)
                     }, function (err) { 

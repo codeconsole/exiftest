@@ -1,0 +1,28 @@
+#RESULT {
+	display: none; 
+	overflow: scroll;
+	height: 250px;
+	width: 100%;
+	position: absolute;
+	left: 0;
+	bottom: 0; 
+	background-color:white;
+	text-transform: none;
+}
+
+.app {
+	top: 20%;
+}
+
+.cameraOptions {
+	text-transform: none;
+}
+
+input[name="quality"] {
+  width: 20px;
+}
+
+#selectedImage {
+	visibility: hidden;
+	width:  200px;
+}
