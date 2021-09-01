@@ -21,8 +21,6 @@
     "@capacitor/core": "^3.2.0",
     "@capacitor/filesystem": "^1.0.2",
     "@capacitor/ios": "^3.2.0",
-    "@ionic/cli": "^6.17.0",
-    "ios-deploy": "^1.11.4",
-    "jquery": "^3.6.0"
+    "@ionic/cli": "^6.17.0"
   }
 }
