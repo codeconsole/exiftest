@@ -39,15 +39,18 @@ function onDeviceReady() {
 
 }
 
+var cam
+
 function processPhoto(source) {
     // https://github.com/ionic-team/capacitor/blob/2.4.9/core/src/core-plugin-definitions.ts
-    Camera.getPhoto({
+    cam = Camera.getPhoto({
       quality: parseInt($('input[name=quality]').val()),
       resultType: $('select[name=destinationType]').val() == 'FILE_URI'? 'uri' : 'dataUrl',
       allowEditing: false,
       correctOrientation: $('input[name=correctOrientation]').val() == 'true',
       source: source
-    }).then(function(photo) {
+    })
+    cam.then(function(photo) {
         $('#selectedImage').attr('src', photo.dataUrl? photo.dataUrl : photo.webPath).css('visibility', 'visible')
 
         if (photo.dataUrl) {
@@ -59,5 +62,10 @@ function processPhoto(source) {
                 CameraUtil.showResult(CameraUtil.stringToBlob(file.data), photo)
             })
         }
+    }, function(rej) {
+        console.log(rej)
+    })
+    cam.catch(function(error) {
+      console.error(error);
     })
 }
