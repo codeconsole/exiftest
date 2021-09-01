@@ -24,3 +24,8 @@ npx cap run ios
 ```
 
 https://github.com/ionic-team/capacitor-plugins/issues/587
+
+
+![Bad Image](https://raw.githubusercontent.com/codeconsole/exiftest/capacitor/screenshots/bad-image.jpg)
+
+![XCode Output](https://raw.githubusercontent.com/codeconsole/exiftest/capacitor/screenshots/logging.jpg)
