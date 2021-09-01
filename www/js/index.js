@@ -50,9 +50,10 @@ function processPhoto(source) {
             img = JSON.parse(imageURI)
             img.json_metadata = JSON.parse(img.json_metadata)
         }
-        document.getElementById('selectedImage').style = '';
+        var selectedImage = $('#selectedImage')
+        selectedImage.css('visibility', 'visible')
         if (cordova.platformId == 'browser' || opts.destinationType == Camera.DestinationType.DATA_URL) {
-            document.getElementById('selectedImage').src = 'data:image/jpeg;base64,'+img.filename
+            selectedImage.attr('src', 'data:image/jpeg;base64,'+img.filename)
             var blob = CameraUtil.stringToBlob(img.filename)
             img.filename = '[HIDDEN]'
             CameraUtil.showResult(blob, img)
@@ -62,7 +63,7 @@ function processPhoto(source) {
                 && img.filename.indexOf('content://') == -1) {
                 img.filename = 'file://' + img.filename;
             }
-            document.getElementById('selectedImage').src = cordova.platformId == 'iOS'? window.WkWebView.convertFilePath(img.filename) : img.filename
+            selectedImage.attr('src', cordova.platformId == 'iOS'? window.WkWebView.convertFilePath(img.filename) : img.filename)
             window.resolveLocalFileSystemURL(img.filename,
                 function success(fileEntry) {
                     fileEntry.file(function (file) {
