@@ -26,8 +26,8 @@ document.addEventListener('deviceready', onDeviceReady, false);
 function onDeviceReady() {
     // Cordova is now initialized. Have fun!
 
-    //console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
-    //if (navigator.camera) {
+    console.log('Running cordova-' + Capacitor.platform);
+    if (Camera) {
         document.getElementById('deviceready').classList.add('ready');
         document.getElementById('CAMERA').onclick = function() {
             processPhoto('PHOTOS');
@@ -35,22 +35,20 @@ function onDeviceReady() {
         document.getElementById('PHOTOLIBRARY').onclick = function() {
             processPhoto('PHOTOS');
         }
-    //}
+    }
 
 }
 
-var cam
 
 function processPhoto(source) {
     // https://github.com/ionic-team/capacitor/blob/2.4.9/core/src/core-plugin-definitions.ts
-    cam = Camera.getPhoto({
+    Camera.getPhoto({
       quality: parseInt($('input[name=quality]').val()),
       resultType: $('select[name=destinationType]').val() == 'FILE_URI'? 'uri' : 'dataUrl',
       allowEditing: false,
       correctOrientation: $('input[name=correctOrientation]').val() == 'true',
       source: source
-    })
-    cam.then(function(photo) {
+    }).then(function(photo) {
         $('#selectedImage').attr('src', photo.dataUrl? photo.dataUrl : photo.webPath).css('visibility', 'visible')
 
         if (photo.dataUrl) {
@@ -62,10 +60,7 @@ function processPhoto(source) {
                 CameraUtil.showResult(CameraUtil.stringToBlob(file.data), photo)
             })
         }
-    }, function(rej) {
-        console.log(rej)
-    })
-    cam.catch(function(error) {
-      console.error(error);
+    }, function(error) {
+        console.error(error)
     })
 }
