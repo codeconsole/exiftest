@@ -1,32 +1,9 @@
 const { Camera, Filesystem } = Capacitor.Plugins
 
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
-// Wait for the deviceready event before using any of Cordova's device APIs.
-// See https://cordova.apache.org/docs/en/latest/cordova/events/events.html#deviceready
 document.addEventListener('deviceready', onDeviceReady, false)
 
 function onDeviceReady() {
-    // Cordova is now initialized. Have fun!
-
-    console.log('Running cordova-' + Capacitor.platform)
+    console.log('Running Capacitor-' + Capacitor.platform)
     if (Camera) {
         document.getElementById('deviceready').classList.add('ready')
         document.getElementById('CAMERA').onclick = function() {
@@ -36,20 +13,20 @@ function onDeviceReady() {
             processPhoto('PHOTOS')
         }
     }
-
 }
 
 
 function processPhoto(source) {
     // https://github.com/ionic-team/capacitor/blob/2.4.9/core/src/core-plugin-definitions.ts
     Camera.checkPermissions().then(function(permissions) {
-        if (permissions[source.toLowerCase()] != 'granted') {
+        if (permissions[source.toLowerCase()] != 'granted' && confirm('Run Camera.requestPermissions()?')) {
             Camera.requestPermissions(source.toLowerCase()).then(function(permissionStatus) {
                 if (permissions[source.toLowerCase()] != 'denied') {
                     processPhoto(source)
                 } else {
                     alert('You have not granted access to use the '+source.toLowerCase())
                 }
+                return
             })
         }
         Camera.getPhoto({
