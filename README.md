@@ -1,5 +1,9 @@
 # Capacitor Camera Plugin EXIF Test App
 
+https://capacitorjs.com/docs/apis/camera
+https://github.com/ionic-team/capacitor-plugins/tree/main/camera
+
+
 This plugin demonstrates the Capacitor Camera Plugin.
 It allows you to select and image and then displays the associated EXIF information after you select it.
 
