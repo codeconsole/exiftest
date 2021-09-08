@@ -20,6 +20,7 @@
     "@capacitor/camera": "^1.0.4",
     "@capacitor/core": "^3.2.0",
     "@capacitor/filesystem": "^1.0.2",
+    "@capacitor/geolocation": "^1.1.0",
     "@capacitor/ios": "^3.2.0",
     "@ionic/cli": "^6.17.0"
   }

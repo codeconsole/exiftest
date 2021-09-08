@@ -10,6 +10,13 @@
 	text-transform: none;
 }
 
+@media screen and (prefers-color-scheme: dark) {
+	#RESULT {
+		color:white;
+		background-color: black;
+	}
+}
+
 .app {
 	top: 20%;
 }

@@ -1,4 +1,4 @@
-const { Camera, Filesystem } = Capacitor.Plugins
+const { Camera, Filesystem, Geolocation } = Capacitor.Plugins
 
 document.addEventListener('deviceready', onDeviceReady, false)
 
@@ -30,30 +30,33 @@ function processPhoto(source) {
                 }
                 return
             })
-        } else {
-            return
+        } else if (permissions[source.toLowerCase()] == 'denied') {
+            alert('You have not granted access to use the '+source.toLowerCase())
+            return 
         }
-        alert('done!!')
-        Camera.getPhoto({
-          quality: parseInt($('input[name=quality]').val()),
-          resultType: $('select[name=destinationType]').val() == 'FILE_URI'? 'uri' : 'dataUrl',
-          allowEditing: false,
-          correctOrientation: $('input[name=correctOrientation]').val() == 'true',
-          source: source
-        }).then(function(photo) {
-            $('#selectedImage').attr('src', photo.dataUrl? photo.dataUrl : photo.webPath).css('visibility', 'visible')
+        Geolocation.requestPermissions().then(function(permissionStatus) {    
+            alert(JSON.stringify(permissionStatus)) 
+            Camera.getPhoto({
+              quality: parseInt($('input[name=quality]').val()),
+              resultType: $('select[name=destinationType]').val() == 'FILE_URI'? 'uri' : 'dataUrl',
+              allowEditing: false,
+              correctOrientation: $('input[name=correctOrientation]').val() == 'true',
+              source: source
+            }).then(function(photo) {
+                $('#selectedImage').attr('src', photo.dataUrl? photo.dataUrl : photo.webPath).css('visibility', 'visible')
 
-            if (photo.dataUrl) {
-                var blob = CameraUtil.stringToBlob(photo.dataUrl.substring('data:image/jpeg;base64,'.length))
-                photo.dataUrl = '[HIDDEN]'
-                CameraUtil.showResult(blob, photo)
-            } else{
-                Filesystem.readFile({path: photo.path}).then(function(file) {
-                    CameraUtil.showResult(CameraUtil.stringToBlob(file.data), photo)
-                })
-            }
-        }, function(error) {
-            console.error(error)
-        })
+                if (photo.dataUrl) {
+                    var blob = CameraUtil.stringToBlob(photo.dataUrl.substring('data:image/jpeg;base64,'.length))
+                    photo.dataUrl = '[HIDDEN]'
+                    CameraUtil.showResult(blob, photo)
+                } else{
+                    Filesystem.readFile({path: photo.path}).then(function(file) {
+                        CameraUtil.showResult(CameraUtil.stringToBlob(file.data), photo)
+                    })
+                }
+            }).catch(function(error) {
+                alert(JSON.stringify(error))
+            })     
+        })   
     })
 }
