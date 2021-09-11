@@ -43,7 +43,9 @@ What this example demonstrates is capacitor.js won't load Android Lollipop and M
 
 https://github.com/ionic-team/capacitor/issues/5043
 
-Followed by:
+![Bad Image](screenshots/android-22-error.jpg)
+
+To replicate:
 ```
 npx cap run android --target=Pixel_2_API_22  
 ```
@@ -66,6 +68,6 @@ npx cap run ios
 ```
 
 
-![Bad Image](https://raw.githubusercontent.com/codeconsole/exiftest/capacitor/screenshots/bad-image.jpg)
+![Bad Image](screenshots/bad-image.jpg)
 
-![XCode Output](https://raw.githubusercontent.com/codeconsole/exiftest/capacitor/screenshots/logging.jpg)
+![XCode Output](screenshots/logging.jpg)
