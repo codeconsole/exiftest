@@ -43,7 +43,7 @@ What this example demonstrates is capacitor.js won't load Android Lollipop and M
 
 https://github.com/ionic-team/capacitor/issues/5043
 
-![Bad Image](screenshots/android-22-error.jpg)
+![Android Error](screenshots/android-22-error.jpg)
 
 To replicate:
 ```
