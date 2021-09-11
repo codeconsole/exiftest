@@ -41,6 +41,8 @@ avdmanager create avd --name Pixel_2_API_24 --package 'system-images;android-24;
 ## Issue with Android 21-23
 What this example demonstrates is capacitor.js won't load Android Lollipop and Marshmallow
 
+https://github.com/ionic-team/capacitor/issues/5043
+
 Followed by:
 ```
 npx cap run android --target=Pixel_2_API_22  
