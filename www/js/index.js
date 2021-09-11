@@ -1,10 +1,8 @@
-const { Camera, Filesystem, Geolocation } = Capacitor.Plugins
-
 document.addEventListener('deviceready', onDeviceReady, false)
 
 function onDeviceReady() {
     console.log('Running Capacitor-' + Capacitor.platform)
-    if (Camera) {
+    if (Capacitor.Plugins.Camera) {
         document.getElementById('deviceready').classList.add('ready')
         document.getElementById('CAMERA').onclick = function() {
             processPhoto('CAMERA')
@@ -20,9 +18,9 @@ function processPhoto(source) {
     // https://github.com/ionic-team/capacitor/blob/2.4.9/core/src/core-plugin-definitions.ts
     // https://github.com/ionic-team/capacitor/blob/main/core/src/definitions.ts
     // https://github.com/ionic-team/capacitor-plugins/blob/main/camera/src/definitions.ts
-    Camera.checkPermissions().then(function(permissions) {
+    Capacitor.Plugins.Camera.checkPermissions().then(function(permissions) {
         if (permissions[source.toLowerCase()] != 'granted' && confirm('Run Camera.requestPermissions(\''+source.toLowerCase()+'\')?')) {
-            Camera.requestPermissions({permissions: [source.toLowerCase()]}).then(function(permissionStatus) {
+            Capacitor.Plugins.Camera.requestPermissions({permissions: [source.toLowerCase()]}).then(function(permissionStatus) {
                 if (permissions[source.toLowerCase()] != 'denied') {
                     processPhoto(source)
                 } else {
@@ -34,9 +32,9 @@ function processPhoto(source) {
             alert('You have not granted access to use the '+source.toLowerCase())
             return 
         }
-        Geolocation.requestPermissions().then(function(permissionStatus) {    
+        Capacitor.Plugins.Geolocation.requestPermissions().then(function(permissionStatus) {    
             alert(JSON.stringify(permissionStatus)) 
-            Camera.getPhoto({
+            Capacitor.Plugins.Camera.getPhoto({
               quality: parseInt($('input[name=quality]').val()),
               resultType: $('select[name=destinationType]').val() == 'FILE_URI'? 'uri' : 'dataUrl',
               allowEditing: false,
@@ -50,7 +48,7 @@ function processPhoto(source) {
                     photo.dataUrl = '[HIDDEN]'
                     CameraUtil.showResult(blob, photo)
                 } else{
-                    Filesystem.readFile({path: photo.path}).then(function(file) {
+                    Capacitor.Plugins.Filesystem.readFile({path: photo.path}).then(function(file) {
                         CameraUtil.showResult(CameraUtil.stringToBlob(file.data), photo)
                     })
                 }
