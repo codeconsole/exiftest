@@ -54,7 +54,7 @@ You can always switch back to the release version:
 ./bin/switch.sh release
 ```
 
-# Corodva EXIF Current State
+# Cordova EXIF Current State
 
 https://github.com/apache/cordova-plugin-camera/issues/759
 
@@ -66,3 +66,8 @@ I am starting to explore migrating my app to capacitor.  As a demonstration, I d
 So far I have found it to be working with the strange exception of 1 of the images from the simulator phone libary not loading and throwing an exception.
 Depending on which issue gets a response first will determine whether or not I end my almost 10 year relationship with Cordova.
 
+Version | Exif Photos | Exif Camera | GPS Photos | GPS Camera | Android 10
+------- | ----------- | ----------- | ---------- | ---------- | ----------
+pullrequest | F | - | F | - | F
+master | X | X | |
+cordova-plugin-camera-with-exif | H | H | H | H | -

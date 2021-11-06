@@ -1,5 +1,5 @@
 if [ $# -lt 1 ]; then
-  echo "./bin/switch.sh [release/master/ryaa/ /cordova-plugin-camera-with-exif]"
+  echo "./bin/switch.sh [release/master/ryaa/pullrequest/cordova-plugin-camera-with-exif]"
   exit
 fi
 

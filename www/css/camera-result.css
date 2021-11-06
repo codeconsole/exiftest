@@ -5,9 +5,17 @@
 	width: 100%;
 	position: absolute;
 	left: 0;
-	bottom: 0; 
+	bottom: 0;
+	color: black;
 	background-color:white;
 	text-transform: none;
+}
+
+@media screen and (prefers-color-scheme: dark) {
+	#RESULT {
+		color:white;
+		background-color: black;
+	}
 }
 
 .app {
