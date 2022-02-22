@@ -18,25 +18,25 @@ function onDeviceReady() {
 
 
 function processPhoto(source) {
-    var pickImages = source == 'PICKIMAGES'
-    if (pickImages) {
+    if (source == 'PICKIMAGES') {
+        PhotoUtil.pickImages = true
         source = 'PHOTOS'
     }
     // https://github.com/ionic-team/capacitor/blob/2.4.9/core/src/core-plugin-definitions.ts
     // https://github.com/ionic-team/capacitor/blob/main/core/src/definitions.ts
     // https://github.com/ionic-team/capacitor-plugins/blob/main/camera/src/definitions.ts
     Capacitor.Plugins.Camera.checkPermissions().then(function(permissions) {
-        if (permissions[source.toLowerCase()] != 'granted' && confirm('Run Camera.requestPermissions(\''+source.toLowerCase()+'\')?')) {
+        if (permissions[source.toLowerCase()] != 'granted' && confirm(`Run Camera.requestPermissions('${source.toLowerCase()}')?`)) {
             Capacitor.Plugins.Camera.requestPermissions({permissions: [source.toLowerCase()]}).then(function(permissionStatus) {
                 if (permissions[source.toLowerCase()] != 'denied') {
                     processPhoto(source)
                 } else {
-                    alert('You have not granted access to use the '+source.toLowerCase())
+                    alert(`You have not granted access to use the '${source.toLowerCase()}'`)
                 }
-                return
             })
+            return
         } else if (permissions[source.toLowerCase()] != 'granted') {
-            alert('You do not have permission to access \'+source.toLowerCase()+\'')
+            alert(`You do not have permission to access '${source.toLowerCase()}'`)
             return
         }            
         Capacitor.Plugins.Geolocation.requestPermissions().then(function(permissionStatus) {    
@@ -47,7 +47,7 @@ function processPhoto(source) {
                 allowEditing: false,
                 correctOrientation: $('input[name=correctOrientation]').val() == 'true'
             }
-            if (pickImages) {
+            if (PhotoUtil.pickImages) {
                 opts.limit = 1
                 Capacitor.Plugins.Camera.pickImages(opts).then(function(result) { 
                     PhotoUtil.displayPhoto(result.photos[0])
@@ -56,11 +56,12 @@ function processPhoto(source) {
                 opts.source = source
                 Capacitor.Plugins.Camera.getPhoto(opts).then(PhotoUtil.displayPhoto).catch(PhotoUtil.displayError)   
             }  
-        })   
+         })   
     })
 }
 
 var PhotoUtil = {
+    pickImages: false,
     displayPhoto: function(photo) {
         $('#selectedImage').attr('src', photo.dataUrl? photo.dataUrl : photo.webPath).css('visibility', 'visible')
 
